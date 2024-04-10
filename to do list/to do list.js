@@ -1,5 +1,6 @@
 const taskInput = document.getElementById('taskInput');
 const taskList = document.getElementById('taskList');
+const showHiddenButton = document.getElementById('showHiddenButton');
 
 // Função para carregar as tarefas do armazenamento local
 function loadTasks() {
@@ -26,7 +27,7 @@ function createTaskElement(task) {
   li.dataset.id = task.id; // Armazenar o ID da tarefa como um atributo de dados
   li.innerHTML = `<span>${task.text}</span>` + 
     '<button onclick="editTask(this)">Editar</button>' +
-    '<button onclick="removeTask(this)">Remover</button>';
+    '<button onclick="hideTask(this)">Ocultar</button>';
   taskList.appendChild(li);
 }
 
@@ -40,11 +41,19 @@ function editTask(button) {
   }
 }
 
-// Função para remover uma tarefa
-function removeTask(button) {
+// Função para ocultar uma tarefa
+function hideTask(button) {
   const li = button.parentElement;
-  li.remove();
+  li.style.display = 'none';
   saveTasks();
+}
+
+// Função para mostrar tarefas ocultas
+function showHiddenTasks() {
+  const hiddenTasks = document.querySelectorAll('#taskList li[style="display: none;"]');
+  hiddenTasks.forEach(task => {
+    task.style.display = 'block';
+  });
 }
 
 // Função para salvar as tarefas no armazenamento local
@@ -66,6 +75,9 @@ taskList.addEventListener('click', function(event) {
     saveTasks();
   }
 });
+
+// Adiciona um listener de evento para mostrar tarefas ocultas
+showHiddenButton.addEventListener('click', showHiddenTasks);
 
 // Carrega as tarefas ao carregar a página
 loadTasks();
